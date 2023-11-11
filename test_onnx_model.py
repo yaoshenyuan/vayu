@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+import pdb
+from imread_from_url import imread_from_url
 
 import onnxruntime
 
@@ -10,6 +12,8 @@ def inference(left, right, model, no_flow_model):
     input2_name = model.get_inputs()[1].name
     input3_name = model.get_inputs()[2].name
     output_name = model.get_outputs()[0].name
+    
+    pdb.set_trace()
 
     # Decimate the image to half the original size for flow estimation network
     imgL_dw2 = cv2.resize(
@@ -41,8 +45,9 @@ def inference(left, right, model, no_flow_model):
 
 if __name__ == '__main__':
 
-    left_img = cv2.imread("left.png")
-    right_img = cv2.imread("right.png")
+
+    left_img = imread_from_url("https://raw.githubusercontent.com/megvii-research/CREStereo/master/img/test/left.png")
+    right_img = imread_from_url("https://raw.githubusercontent.com/megvii-research/CREStereo/master/img/test/right.png")
 
     in_h, in_w = left_img.shape[:2]
 
@@ -70,9 +75,14 @@ if __name__ == '__main__':
     disp_vis = (disp - disp.min()) / (disp.max() - disp.min()) * 255.0
     disp_vis = disp_vis.astype("uint8")
     disp_vis = cv2.applyColorMap(disp_vis, cv2.COLORMAP_INFERNO)
+    
+    pdb.set_trace()
+    cv2.imwrite("left_onnx.png", left_img)
+    cv2.imwrite("right_onnx.png", right_img)
+    cv2.imwrite("disp_onnx.png", disp_vis)
 
-    combined_img = np.hstack((left_img, disp_vis))
-    cv2.namedWindow("output", cv2.WINDOW_NORMAL)
-    cv2.imshow("output", combined_img)
-    cv2.imwrite("output.jpg", disp_vis)
-    cv2.waitKey(0)
+    # combined_img = np.hstack((left_img, disp_vis))
+    # cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    # cv2.imshow("output", combined_img)
+    # cv2.imwrite("output.jpg", disp_vis)
+    # cv2.waitKey(0)

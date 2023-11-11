@@ -6,6 +6,8 @@ from imread_from_url import imread_from_url
 
 from nets import Model
 
+import pdb
+
 if __name__ == '__main__':
 
 	model_path = "models/crestereo_eth3d.pth"
@@ -14,7 +16,7 @@ if __name__ == '__main__':
 	model.load_state_dict(torch.load(model_path), strict=True)
 	model.eval()
 
-	in_h, in_w = (480, 640)
+	in_h, in_w = (720, 1280)
 	t1_half = torch.rand(1, 3, in_h//2, in_w//2)
 	t2_half = torch.rand(1, 3, in_h//2, in_w//2)
 

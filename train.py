@@ -21,6 +21,8 @@ import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import DataLoader, RandomSampler
 
+import pdb
+
 
 def parse_yaml(file_path: str) -> namedtuple:
     """Parse yaml configuration file and return the object in `namedtuple`."""
@@ -349,7 +351,10 @@ def train(args, world_size):
 
     # datasets
     dataset = CREStereoDataset(args.training_data_path)
-    sampler = RandomSampler(dataset, replacement=False)
+    
+    pdb.set_trace()
+    
+    r = RandomSampler(dataset, replacement=False)
     worklog.info(f"Dataset size: {len(dataset)}")
     dataloader = DataLoader(dataset, sampler=sampler, batch_size=args.batch_size*world_size,
                             num_workers=0, drop_last=True, persistent_workers=False, pin_memory=True)
@@ -476,6 +481,7 @@ def train(args, world_size):
     worklog.info("Training is done, exit.")
 
 def main(args):
+    pdb.set_trace()
     # initial info
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
@@ -484,6 +490,7 @@ def main(args):
     if args.dist and world_size > 1:
         train_dist(args, world_size)
     else:
+        print("Not dist")
         train(args, world_size)
 
 if __name__ == "__main__":

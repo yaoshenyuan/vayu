@@ -152,5 +152,6 @@ cython_debug/
 #.idea/
 
 vis_results/
-models/*
+# models/*
 test_data/*
+stereo_trainset/*

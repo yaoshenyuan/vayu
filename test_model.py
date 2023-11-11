@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 from imread_from_url import imread_from_url
 
+import pdb
+
 from nets import Model
 
 device = 'cuda'
@@ -33,6 +35,7 @@ def inference(left, right, model, n_iter=20):
 		align_corners=True,
 	)
 	# print(imgR_dw2.shape)
+	pdb.set_trace()
 	with torch.inference_mode():
 		pred_flow_dw2 = model(imgL_dw2, imgR_dw2, iters=n_iter, flow_init=None)
 
@@ -71,12 +74,17 @@ if __name__ == '__main__':
 	disp_vis = (disp - disp.min()) / (disp.max() - disp.min()) * 255.0
 	disp_vis = disp_vis.astype("uint8")
 	disp_vis = cv2.applyColorMap(disp_vis, cv2.COLORMAP_INFERNO)
+	
+	pdb.set_trace()
+	cv2.imwrite("left.png", left_img)
+	cv2.imwrite("right.png", right_img)
+	cv2.imwrite("disp.png", disp_vis)
 
-	combined_img = np.hstack((left_img, disp_vis))
-	cv2.namedWindow("output", cv2.WINDOW_NORMAL)
-	cv2.imshow("output", combined_img)
-	cv2.imwrite("output.jpg", disp_vis)
-	cv2.waitKey(0)
+	# combined_img = np.hstack((left_img, disp_vis))
+	# cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+	# cv2.imshow("output", combined_img)
+	# cv2.imwrite("output.jpg", disp_vis)
+	# cv2.waitKey(0)
 
 
 
